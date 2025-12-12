@@ -28,10 +28,53 @@
                         <a href="{{ route('courses.index') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
                             ← Back to courses
                         </a>
-                        @if(auth()->user()->id === $course->instructor_id)
-                            <a href="{{ route('courses.edit', $course) }}" class="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500">
-                                Edit course
-                            </a>
+                        
+                        @if(auth()->check())
+                            @if(auth()->user()->id === $course->instructor_id)
+                                {{-- Instructor buttons --}}
+                                <a href="{{ route('courses.edit', $course) }}" class="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500">
+                                    Edit course
+                                </a>
+                                <form action="{{ route('courses.destroy', $course) }}" 
+                                      method="POST" 
+                                      onsubmit="return confirm('Are you sure you want to delete this course? This action cannot be undone.');"
+                                      class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-500">
+                                        Delete course
+                                    </button>
+                                </form>
+                            @else
+                                {{-- Student buttons --}}
+                                @if(auth()->user()->enrolledCourses->contains($course->id))
+                                    <button class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm cursor-default">
+                                        ✓ Enrolled
+                                    </button>
+                                    <form action="{{ route('courses.unenroll', $course) }}" 
+                                          method="POST" 
+                                          onsubmit="return confirm('Are you sure you want to unenroll from this course?');"
+                                          class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" 
+                                                class="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-500">
+                                            Unenroll
+                                        </button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('courses.enroll', $course) }}" 
+                                          method="POST" 
+                                          class="inline-block">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500">
+                                            Enroll in course
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -39,4 +82,3 @@
         </div>
     </div>
 </x-app-layout>
-
