@@ -40,8 +40,11 @@ Route::middleware('auth')->group(function () {
 
     // Course routes visible to all logged‑in users
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
-    Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
 
+    // Student enrollment routes - MUST BE HERE, NOT inside instructor middleware
+    Route::post('/courses/{course}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
+    Route::delete('/courses/{course}/unenroll', [CourseController::class, 'unenroll'])->name('courses.unenroll');
+    
     // Instructor-only routes (use your InstructorMiddleware alias)
     Route::middleware('instructor')->group(function () {
         Route::get('/instructor/dashboard', [InstructorController::class, 'dashboard'])->name('instructor.dashboard');
@@ -51,6 +54,9 @@ Route::middleware('auth')->group(function () {
         Route::patch('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
         Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
     });
+    
+    // This must come LAST - after /courses/create and /courses/{course}/edit
+    Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
 });
 
 require __DIR__.'/auth.php';
