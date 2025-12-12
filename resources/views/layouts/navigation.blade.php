@@ -25,15 +25,15 @@
             </div>
 
             <div class="hidden items-center gap-3 sm:flex">
-                @if(Auth::check() && Auth::user()->isInstructor())
-                    <a href="{{ route('courses.create') }}" class="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500">
-                        + New course
-                    </a>
-                @endif
+                @auth
+                    @if(Auth::user()->isInstructor())
+                        <a href="{{ route('courses.create') }}" class="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500">
+                            + New course
+                        </a>
+                    @endif
 
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        @if(Auth::check())
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
                             <button class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200 focus:outline-none">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-xs font-semibold uppercase text-white">
                                     {{ Str::substr(Auth::user()->name, 0, 2) }}
@@ -46,11 +46,9 @@
                                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.088l3.71-3.857a.75.75 0 111.08 1.04l-4.25 4.417a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                                 </svg>
                             </button>
-                        @endif
-                    </x-slot>
+                        </x-slot>
 
-                    <x-slot name="content">
-                        @if(Auth::check())
+                        <x-slot name="content">
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
@@ -62,9 +60,16 @@
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
-                        @endif
-                    </x-slot>
-                </x-dropdown>
+                        </x-slot>
+                    </x-dropdown>
+                @else
+                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-slate-700 transition hover:text-slate-900">
+                        Sign in
+                    </a>
+                    <a href="{{ route('register') }}" class="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500">
+                        Get Started
+                    </a>
+                @endauth
             </div>
 
             <div class="-me-2 flex items-center sm:hidden">
@@ -97,7 +102,7 @@
         </div>
 
         <div class="border-t border-slate-200 pt-4 pb-4">
-            @if(Auth::check())
+            @auth
                 <div class="px-4">
                     <div class="text-base font-semibold text-slate-900">{{ Auth::user()->name }}</div>
                     <div class="text-sm text-slate-500">{{ Auth::user()->email }}</div>
@@ -116,7 +121,16 @@
                         </x-responsive-nav-link>
                     </form>
                 </div>
-            @endif
+            @else
+                <div class="space-y-1 px-4">
+                    <x-responsive-nav-link :href="route('login')">
+                        {{ __('Sign in') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('register')">
+                        {{ __('Get Started') }}
+                    </x-responsive-nav-link>
+                </div>
+            @endauth
         </div>
     </div>
 </nav>
