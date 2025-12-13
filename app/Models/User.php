@@ -22,7 +22,7 @@ protected $fillable = [
     'email',
     'password',
     'role',
-    'profile_picture', // Add this line
+    'profile_picture', 
 ];
 
     /**
@@ -69,4 +69,4 @@ protected $fillable = [
     {
         return $this->role === 'student';
     }
-}
+}           
