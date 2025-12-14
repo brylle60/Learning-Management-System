@@ -39,8 +39,8 @@ php artisan migrate
 
 6. Start development server
 ```bash
-php artisan serve
 npm run dev
+php artisan serve
 ```
 
 ## Test Accounts
@@ -57,12 +57,11 @@ npm run dev
 
 ## Group Members
 
-1. [Name] - Leader
-2. [Name] - Developer
-3. [Name] - Developer
-4. [Name] - Developer
-5. [Name] - Developer
+1. John Brylle Crodua - Leader
+2. Kent Arvile Delig - Developer
+3. Ivan Fernandez - Developer
+4. Emae Calonia - Developer
+5. Francis Velez - Developer
 
 ## Live Demo
-
-[Your deployed URL here]
+https://learning-management-system-production-b0bd.up.railway.app/
